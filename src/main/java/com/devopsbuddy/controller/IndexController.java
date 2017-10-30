@@ -1,14 +1,13 @@
 package com.devopsbuddy.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-//@Controller
-public class HellowController {
-	
-	@RequestMapping("/hello")
-	public String sayHello() {
-		return "index";
-	}
-
+@Controller
+public class IndexController {
+    @RequestMapping("/")
+    public String home() {
+        return "index";
+    }
 }
