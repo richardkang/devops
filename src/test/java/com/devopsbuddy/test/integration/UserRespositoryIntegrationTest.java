@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Set;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -83,4 +84,15 @@ public class UserRespositoryIntegrationTest extends AbstractIntegrationTest {
         userRepository.delete(basicUser.getId());
     }
 
+    @Test
+    public void testUpdatePassword() {
+        User user  = createUser(testName);
+        String newPassword = UUID.randomUUID().toString();
+
+        userRepository.updateUserPassword(user.getId(),newPassword);
+
+        user = userRepository.findOne(user.getId());
+        Assert.assertEquals(newPassword,user.getPassword());
+
+    }
 }

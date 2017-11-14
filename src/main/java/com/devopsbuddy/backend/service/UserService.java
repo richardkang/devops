@@ -1,10 +1,12 @@
 package com.devopsbuddy.backend.service;
 
 //import com.devopsbuddy.backend.persistence.domain.backend.PasswordResetToken;
+import com.devopsbuddy.backend.persistence.domain.backend.PasswordResetToken;
 import com.devopsbuddy.backend.persistence.domain.backend.Plan;
 import com.devopsbuddy.backend.persistence.domain.backend.User;
 import com.devopsbuddy.backend.persistence.domain.backend.UserRole;
 //import com.devopsbuddy.backend.persistence.repositories.PasswordResetTokenRepository;
+import com.devopsbuddy.backend.persistence.repositories.PasswordResetTokenRepository;
 import com.devopsbuddy.backend.persistence.repositories.PlanRepository;
 import com.devopsbuddy.backend.persistence.repositories.RoleRepository;
 import com.devopsbuddy.backend.persistence.repositories.UserRepository;
@@ -36,9 +38,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     /** The application logger */
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
@@ -46,14 +48,14 @@ public class UserService {
     @Transactional
     public User createUser(User user, PlansEnum plansEnum, Set<UserRole> userRoles) {
 
-        /*User localUser = userRepository.findByEmail(user.getEmail());
+        User localUser = userRepository.findByEmail(user.getEmail());
 
         if (localUser != null) {
             LOG.info("User with username {} and email {} already exist. Nothing will be done. ",
                     user.getUsername(), user.getEmail());
         } else {
 
-         */
+
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
 
@@ -71,11 +73,41 @@ public class UserService {
 
             user.getUserRoles().addAll(userRoles);
 
-            User localUser = userRepository.save(user);
+            localUser = userRepository.save(user);
 
-        //}
+        }
 
         return localUser;
 
+    }
+
+    /**
+     * Returns a user by username or null if a user could not be found.
+     * @param username The username to be found
+     * @return A user by username or null if a user could not be found.
+     */
+    public User findByUserName(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    /**
+     * Returns a user for the given email or null if a user could not be found.
+     * @param email The email associated to the user to find.
+     * @return a user for the given email or null if a user could not be found.
+     */
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public void updateUserPassword(long userId, String password) {
+        password = passwordEncoder.encode(password);
+        userRepository.updateUserPassword(userId, password);
+        LOG.debug("Password updated successfully for user id {} ", userId);
+
+        Set<PasswordResetToken> resetTokens = passwordResetTokenRepository.findAllByUserId(userId);
+        if (!resetTokens.isEmpty()) {
+            passwordResetTokenRepository.delete(resetTokens);
+        }
     }
 }

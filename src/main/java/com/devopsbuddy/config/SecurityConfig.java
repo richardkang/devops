@@ -3,6 +3,7 @@ package com.devopsbuddy.config;
 import com.devopsbuddy.backend.service.UserSecurityService;
 //import com.devopsbuddy.web.controllers.ForgotMyPasswordController;
 //import com.devopsbuddy.web.controllers.SignupController;
+import com.devopsbuddy.controller.ForgotMyPasswordController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             "/about/**",
             "/contact/**",
             "/error/**/*",
-            "/console/**"
-//            ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING,
-//            ForgotMyPasswordController.CHANGE_PASSWORD_PATH,
+            "/console/**",
+            ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING,
+            ForgotMyPasswordController.CHANGE_PASSWORD_PATH,
 //            SignupController.SIGNUP_URL_MAPPING
     };
 
