@@ -4,6 +4,7 @@ import com.devopsbuddy.backend.service.UserSecurityService;
 //import com.devopsbuddy.web.controllers.ForgotMyPasswordController;
 //import com.devopsbuddy.web.controllers.SignupController;
 import com.devopsbuddy.controller.ForgotMyPasswordController;
+import com.devopsbuddy.web.controllers.SignupController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             "/console/**",
             ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING,
             ForgotMyPasswordController.CHANGE_PASSWORD_PATH,
-//            SignupController.SIGNUP_URL_MAPPING
+            SignupController.SIGNUP_URL_MAPPING
     };
 
     @Override
@@ -59,10 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         LOG.info("activeProfils : {}",activeProfiles);
-        if (activeProfiles.contains("dev")) {
+        //if (activeProfiles.contains("dev")) {
             http.csrf().disable();
             http.headers().frameOptions().disable();
-        }
+        //}
 
         http
                 .authorizeRequests()

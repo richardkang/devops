@@ -137,7 +137,7 @@ public class ForgotMyPasswordController {
             model.addAttribute(MESSAGE_ATTRIBUTE_NAME, i18NService.getMessage("resetPassword.token.expired", locale));
             return CHANGE_PASSWORD_VIEW_NAME;
         }
-
+        LOG.info("principalId : [{}]", user.getId());
         model.addAttribute("principalId", user.getId());
 
         // OK to proceed. We auto-authenticate the user so that in the POST request we can check if the user
